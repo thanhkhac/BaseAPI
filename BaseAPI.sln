@@ -1,10 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseAPI", "BaseAPI\BaseAPI.csproj", "{CF4A3187-242D-4A76-929D-15E0EA9361C4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CompanyEmployees", "CompanyEmployees\CompanyEmployees.csproj", "{CF4A3187-242D-4A76-929D-15E0EA9361C4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "Contracts\Contracts.csproj", "{ED906EB2-895C-48B6-940A-D9AF09C50D51}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoggerService", "LoggerService\LoggerService.csproj", "{BB7A258C-E5F6-42DC-9C7D-5987901E58FE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{E4D835F5-4024-4594-B584-92CAFC8CD790}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{E85CD98E-D595-43B2-A136-B8197C14668C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +28,13 @@ Global
 		{BB7A258C-E5F6-42DC-9C7D-5987901E58FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BB7A258C-E5F6-42DC-9C7D-5987901E58FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BB7A258C-E5F6-42DC-9C7D-5987901E58FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4D835F5-4024-4594-B584-92CAFC8CD790}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4D835F5-4024-4594-B584-92CAFC8CD790}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4D835F5-4024-4594-B584-92CAFC8CD790}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4D835F5-4024-4594-B584-92CAFC8CD790}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E85CD98E-D595-43B2-A136-B8197C14668C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E85CD98E-D595-43B2-A136-B8197C14668C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E85CD98E-D595-43B2-A136-B8197C14668C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E85CD98E-D595-43B2-A136-B8197C14668C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

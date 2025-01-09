@@ -1,8 +1,8 @@
-using BaseAPI.Extensions;
+using CompanyEmployees.Extensions;
 using Microsoft.AspNetCore.HttpOverrides;
 using NLog;
 
-namespace BaseAPI;
+namespace CompanyEmployees;
 
 public class Program
 {
