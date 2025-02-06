@@ -13,6 +13,7 @@ public class Program
         LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
         builder.Services.ConfigureCors();
         builder.Services.ConfigureIisIntegration();
+        builder.Services.ConfigureRepositoryManager();
         builder.Services.AddControllers();
 
         var app = builder.Build();
