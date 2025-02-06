@@ -14,6 +14,7 @@ public class Program
         builder.Services.ConfigureCors();
         builder.Services.ConfigureIisIntegration();
         builder.Services.ConfigureRepositoryManager();
+        builder.Services.ConfigureServiceManager();
         builder.Services.AddControllers();
 
         var app = builder.Build();
