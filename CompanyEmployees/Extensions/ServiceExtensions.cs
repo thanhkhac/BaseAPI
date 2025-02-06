@@ -11,7 +11,7 @@
             });
         }
 
-        public static void ConfigureIISIntegration(this IServiceCollection services) =>
+        public static void ConfigureIisIntegration(this IServiceCollection services) =>
             services.Configure<IISOptions>(options => { });
     }
 }
