@@ -1,4 +1,5 @@
 using CompanyEmployees.Extensions;
+using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
 using NLog;
 
@@ -21,8 +22,14 @@ public class Program
         builder.Services.AddControllers().AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 
         var app = builder.Build();
+        
+        var logger = app.Services.GetRequiredService<ILoggerManager>();
+        app.ConfigureExceptionHandler(logger);
 
-        if (app.Environment.IsDevelopment()) { app.UseDeveloperExceptionPage(); }
+        if (app.Environment.IsDevelopment())
+        {
+            // app.UseDeveloperExceptionPage();
+        }
         else { app.UseHsts(); }
 
         app.UseHttpsRedirection();
