@@ -13,9 +13,12 @@ public class Program
         LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
         builder.Services.ConfigureCors();
         builder.Services.ConfigureIisIntegration();
+        builder.Services.ConfigureLoggerServices();
         builder.Services.ConfigureRepositoryManager();
         builder.Services.ConfigureServiceManager();
-        builder.Services.AddControllers();
+        builder.Services.ConfigureSqlContext(builder.Configuration);
+        builder.Services.AddAutoMapper(typeof(Program));
+        builder.Services.AddControllers().AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 
         var app = builder.Build();
 
