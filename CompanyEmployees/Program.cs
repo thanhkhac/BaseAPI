@@ -2,16 +2,25 @@ using CompanyEmployees.Extensions;
 using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
+using Microsoft.Extensions.Options;
 using NLog;
 
 namespace CompanyEmployees;
 
 public class Program
 {
+
     public static void Main(string[] args)
     {
-        var builder = WebApplication.CreateBuilder(args);
 
+                
+        var builder = WebApplication.CreateBuilder(args);
+        
+        NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
+            new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson() .Services.BuildServiceProvider()
+                .GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters .OfType<NewtonsoftJsonPatchInputFormatter>().First();
+                
         LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
         builder.Services.ConfigureCors();
         builder.Services.ConfigureIisIntegration();
@@ -27,6 +36,7 @@ public class Program
                 {
                     config.RespectBrowserAcceptHeader = true;
                     config.ReturnHttpNotAcceptable = true;
+                    config.InputFormatters.Insert(0, GetJsonPatchInputFormatter());
                 }).AddXmlDataContractSerializerFormatters()
             .AddCustomCSVFormatter()
             .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
