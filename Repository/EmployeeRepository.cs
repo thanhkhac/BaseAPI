@@ -17,11 +17,12 @@ namespace Repository
             var query =
                 FindByCondition(e => e.CompanyId.Equals(companyId), trackChanges)
                     .FilterEmloyees(minAge: employeeParameters.MinAge, maxAge: employeeParameters.MaxAge)
-                    .Search(employeeParameters.SearchTerm);
+                    .Search(employeeParameters.SearchTerm)
+                    .Sort(employeeParameters.OrderBy);
 
             var employees = await query
                 .Skip((employeeParameters.PageNumber - 1) * employeeParameters.PageSize).Take(employeeParameters.PageSize)
-                .OrderBy(e => e.Name).ToListAsync();
+                .ToListAsync();
 
             var count = await query.CountAsync();
 
