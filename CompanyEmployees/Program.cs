@@ -1,3 +1,4 @@
+using ActionFilters.ActionFilters;
 using CompanyEmployees.Extensions;
 using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -13,14 +14,12 @@ public class Program
 
     public static void Main(string[] args)
     {
-
-                
         var builder = WebApplication.CreateBuilder(args);
-        
+
         NewtonsoftJsonPatchInputFormatter GetJsonPatchInputFormatter() =>
-            new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson() .Services.BuildServiceProvider()
-                .GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters .OfType<NewtonsoftJsonPatchInputFormatter>().First();
-                
+            new ServiceCollection().AddLogging().AddMvc().AddNewtonsoftJson().Services.BuildServiceProvider()
+                .GetRequiredService<IOptions<MvcOptions>>().Value.InputFormatters.OfType<NewtonsoftJsonPatchInputFormatter>().First();
+
         LogManager.Setup().LoadConfigurationFromFile(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
         builder.Services.ConfigureCors();
         builder.Services.ConfigureIisIntegration();
@@ -31,6 +30,8 @@ public class Program
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.Configure<ApiBehaviorOptions>(opt => { opt.SuppressModelStateInvalidFilter = true; }
         );
+        
+        builder.Services.AddScoped<ValidationFilterAttribute>();
         builder.Services.AddControllers(
                 config =>
                 {
