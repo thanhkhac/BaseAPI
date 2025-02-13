@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.Extensions.Options;
 using NLog;
+using Service.DataShaping;
+using Shared.DataTransferObjects;
 
 namespace CompanyEmployees;
 
@@ -30,7 +32,6 @@ public class Program
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.Configure<ApiBehaviorOptions>(opt => { opt.SuppressModelStateInvalidFilter = true; }
         );
-        
         builder.Services.AddScoped<ValidationFilterAttribute>();
         builder.Services.AddControllers(
                 config =>
@@ -42,6 +43,8 @@ public class Program
             .AddCustomCSVFormatter()
             .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
 
+        builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
+        
         var app = builder.Build();
 
         var logger = app.Services.GetRequiredService<ILoggerManager>();
