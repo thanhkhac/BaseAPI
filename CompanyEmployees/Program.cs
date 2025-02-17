@@ -1,5 +1,7 @@
 using ActionFilters.ActionFilters;
 using CompanyEmployees.Extensions;
+using CompanyEmployees.Presentation.ActionFilters;
+using CompanyEmployees.Utility;
 using Contracts;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Mvc;
@@ -32,7 +34,10 @@ public class Program
         builder.Services.AddAutoMapper(typeof(Program));
         builder.Services.Configure<ApiBehaviorOptions>(opt => { opt.SuppressModelStateInvalidFilter = true; }
         );
+        builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
+        builder.Services.AddScoped<IEmployeeLinks, EmployeeLinks>();
         builder.Services.AddScoped<ValidationFilterAttribute>();
+        builder.Services.AddScoped<ValidateMediaTypeAttribute>();
         builder.Services.AddControllers(
                 config =>
                 {
@@ -42,9 +47,7 @@ public class Program
                 }).AddXmlDataContractSerializerFormatters()
             .AddCustomCSVFormatter()
             .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
-
-        builder.Services.AddScoped<IDataShaper<EmployeeDto>, DataShaper<EmployeeDto>>();
-        
+        builder.Services.AddCustomMediaTypes();
         var app = builder.Build();
 
         var logger = app.Services.GetRequiredService<ILoggerManager>();
