@@ -48,6 +48,9 @@ public class Program
             .AddCustomCSVFormatter()
             .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
         builder.Services.AddCustomMediaTypes();
+        builder.Services.AddMemoryCache();
+        builder.Services.ConfigureRateLimitingOptions(); 
+        builder.Services.AddHttpContextAccessor();
         var app = builder.Build();
 
         var logger = app.Services.GetRequiredService<ILoggerManager>();
@@ -66,6 +69,7 @@ public class Program
             ForwardedHeaders = ForwardedHeaders.All
         });
 
+        app.UseIpRateLimiting();
         app.UseCors("CorsPolicy");
 
         app.UseAuthorization();
