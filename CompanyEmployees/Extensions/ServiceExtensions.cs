@@ -80,16 +80,17 @@ namespace CompanyEmployees.Extensions
                 options.ReportApiVersions = true;
                 options.AssumeDefaultVersionWhenUnspecified = true;
                 options.DefaultApiVersion = new ApiVersion(1, 0);
-                // options.ApiVersionReader = ApiVersionReader.Combine(
-                //     new UrlSegmentApiVersionReader(),
-                //     new HeaderApiVersionReader("X-Api-Version")
-                // );
+                options.ApiVersionReader = ApiVersionReader.Combine(
+                    new UrlSegmentApiVersionReader(), //Truy cập thông qua api/2.0/Companies 
+                    new HeaderApiVersionReader("api-version"), //Truy cập thông qua Request gửi kèm header api-version là 2.0
+                    new QueryStringApiVersionReader("api-version") //Truy cập thông qua parameter /api/companies?api-version=2.0
+                );
+            })
+            .AddApiExplorer(options =>
+            {
+                // options.GroupNameFormat = "'v'VVV";
+                // options.SubstituteApiVersionInUrl = true;
             });
-            // .AddApiExplorer(options =>
-            // {
-            //     options.GroupNameFormat = "'v'VVV";
-            //     options.SubstituteApiVersionInUrl = true;
-            // });
             
         }
 

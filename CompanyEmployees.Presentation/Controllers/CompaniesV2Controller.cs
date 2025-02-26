@@ -16,7 +16,9 @@ namespace CompanyEmployees.Presentation.Controllers
         public async Task<IActionResult> GetCompanies() {
             var companies = await _service.CompanyService
                 .GetAllCompaniesAsync(trackChanges: false);
-            return Ok(companies);
+                
+            var companiesV2 = companies.Select(x => $"{x.Name} V2");
+            return Ok(companiesV2);
         }
 
     }
