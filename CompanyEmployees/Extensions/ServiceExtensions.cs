@@ -1,5 +1,8 @@
-﻿using Contracts;
+﻿using AspNetCoreRateLimit;
+using Contracts;
+using Entities.Models;
 using LoggerService;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
@@ -63,12 +66,27 @@ namespace CompanyEmployees.Extensions
                 }
             });
         }
+
+        public static void ConfigureIdentity(this IServiceCollection services)
+        {
+            var builder = services.AddIdentity<User, IdentityRole>(o =>
+            {
+                o.Password.RequireDigit = true;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireUppercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequiredLength = 8;
+                o.User.RequireUniqueEmail = true;
+            }).AddEntityFrameworkStores<RepositoryContext>().AddDefaultTokenProviders();
+        }
+        
+        
         public static void ConfigureRateLimitingOptions(this IServiceCollection services)
         {
             var rateLimitRules = new List<RateLimitRule>
             {
                 new RateLimitRule {
-                    Endpoint = "*", Limit = 3,
+                    Endpoint = "*", Limit = 30,
                     Period = "5m"
                 }
             };
@@ -78,5 +96,6 @@ namespace CompanyEmployees.Extensions
             services.AddSingleton<IRateLimitConfiguration, RateLimitConfiguration>();
             services.AddSingleton<IProcessingStrategy, AsyncKeyLockProcessingStrategy>();
         }
+
     }
 }
