@@ -1,4 +1,5 @@
 using ActionFilters.ActionFilters;
+using AspNetCoreRateLimit;
 using CompanyEmployees.Extensions;
 using CompanyEmployees.Presentation.ActionFilters;
 using CompanyEmployees.Utility;
@@ -50,6 +51,12 @@ public class Program
         builder.Services.AddCustomMediaTypes();
         builder.Services.ConfigureVersioning();
         
+        builder.Services.AddAuthentication();
+        builder.Services.AddMemoryCache();
+        builder.Services.ConfigureRateLimitingOptions(); 
+        builder.Services.AddHttpContextAccessor();
+        builder.Services.ConfigureIdentity();
+        builder.Services.ConfigureJWT(builder.Configuration);
         var app = builder.Build();
 
         var logger = app.Services.GetRequiredService<ILoggerManager>();
@@ -67,9 +74,10 @@ public class Program
         {
             ForwardedHeaders = ForwardedHeaders.All
         });
-
+        app.UseIpRateLimiting();
         app.UseCors("CorsPolicy");
-
+        
+        app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
         app.Run();
