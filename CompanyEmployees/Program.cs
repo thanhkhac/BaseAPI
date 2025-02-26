@@ -48,6 +48,8 @@ public class Program
             .AddCustomCSVFormatter()
             .AddApplicationPart(typeof(CompanyEmployees.Presentation.AssemblyReference).Assembly);
         builder.Services.AddCustomMediaTypes();
+        builder.Services.ConfigureVersioning();
+        
         var app = builder.Build();
 
         var logger = app.Services.GetRequiredService<ILoggerManager>();

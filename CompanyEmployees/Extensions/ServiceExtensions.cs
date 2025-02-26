@@ -1,4 +1,5 @@
-﻿using Contracts;
+﻿using Asp.Versioning;
+using Contracts;
 using LoggerService;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
@@ -62,6 +63,26 @@ namespace CompanyEmployees.Extensions
                         .Add("application/vnd.codemaze.hateoas+xml");
                 }
             });
+        }
+        
+        public static void ConfigureVersioning(this IServiceCollection services)
+        {
+            services.AddApiVersioning(options =>
+            {
+                options.ReportApiVersions = true;
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                // options.ApiVersionReader = ApiVersionReader.Combine(
+                //     new UrlSegmentApiVersionReader(),
+                //     new HeaderApiVersionReader("X-Api-Version")
+                // );
+            });
+            // .AddApiExplorer(options =>
+            // {
+            //     options.GroupNameFormat = "'v'VVV";
+            //     options.SubstituteApiVersionInUrl = true;
+            // });
+            
         }
     }
 }
