@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Repository;
 using Service;
 using Service.Contracts;
@@ -72,26 +73,25 @@ namespace CompanyEmployees.Extensions
                 }
             });
         }
-        
+
         public static void ConfigureVersioning(this IServiceCollection services)
         {
             services.AddApiVersioning(options =>
-            {
-                options.ReportApiVersions = true;
-                options.AssumeDefaultVersionWhenUnspecified = true;
-                options.DefaultApiVersion = new ApiVersion(1, 0);
-                options.ApiVersionReader = ApiVersionReader.Combine(
-                    new UrlSegmentApiVersionReader(), //Truy cập thông qua api/2.0/Companies 
-                    new HeaderApiVersionReader("api-version"), //Truy cập thông qua Request gửi kèm header api-version là 2.0
-                    new QueryStringApiVersionReader("api-version") //Truy cập thông qua parameter /api/companies?api-version=2.0
-                );
-            })
-            .AddApiExplorer(options =>
-            {
-                // options.GroupNameFormat = "'v'VVV";
-                // options.SubstituteApiVersionInUrl = true;
-            });
-            
+                {
+                    options.ReportApiVersions = true;
+                    options.AssumeDefaultVersionWhenUnspecified = true;
+                    options.DefaultApiVersion = new ApiVersion(1, 0);
+                    options.ApiVersionReader = ApiVersionReader.Combine(
+                        new UrlSegmentApiVersionReader(), //Truy cập thông qua api/2.0/Companies 
+                        new HeaderApiVersionReader("api-version"), //Truy cập thông qua Request gửi kèm header api-version là 2.0
+                        new QueryStringApiVersionReader("api-version") //Truy cập thông qua parameter /api/companies?api-version=2.0
+                    );
+                })
+                .AddApiExplorer(options =>
+                {
+                    options.GroupNameFormat = "'v'VVV";
+                    options.SubstituteApiVersionInUrl = true;
+                });
         }
 
         public static void ConfigureIdentity(this IServiceCollection services)
@@ -130,7 +130,7 @@ namespace CompanyEmployees.Extensions
         {
             var jwtConfiguration = new JwtConfiguration();
             configuration.Bind(jwtConfiguration.Section, jwtConfiguration);
-            
+
             var secretKey = configuration["SECRET"];
             services.AddAuthentication(opt =>
             {
@@ -153,5 +153,42 @@ namespace CompanyEmployees.Extensions
             });
         }
 
+        public static void ConfigureSwagger(this IServiceCollection services)
+        {
+            services.AddSwaggerGen(s =>
+            {
+                s.SwaggerDoc("v1", new OpenApiInfo { Title = "Code Maze API", Version = "v1" });
+                s.SwaggerDoc("v2", new OpenApiInfo { Title = "Code Maze API", Version = "v2" });
+                
+                var xmlFile = $"{typeof(Presentation.AssemblyReference).Assembly.GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                s.IncludeXmlComments(xmlPath);
+                
+                s.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Place to add JWT with Bearer",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+
+                s.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            },
+                            Name = "Bearer",
+                        },
+                        new List<string>()
+                    }
+                });
+            });
+        }
     }
 }

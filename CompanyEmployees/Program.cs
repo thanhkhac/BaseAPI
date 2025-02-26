@@ -53,14 +53,16 @@ public class Program
         
         builder.Services.AddAuthentication();
         builder.Services.AddMemoryCache();
-        builder.Services.ConfigureRateLimitingOptions(); 
+        builder.Services.ConfigureRateLimitingOptions();
         builder.Services.AddHttpContextAccessor();
         builder.Services.ConfigureIdentity();
         builder.Services.ConfigureJWT(builder.Configuration);
+        builder.Services.ConfigureSwagger();
         var app = builder.Build();
 
         var logger = app.Services.GetRequiredService<ILoggerManager>();
         app.ConfigureExceptionHandler(logger);
+
 
         if (app.Environment.IsDevelopment())
         {
@@ -76,10 +78,17 @@ public class Program
         });
         app.UseIpRateLimiting();
         app.UseCors("CorsPolicy");
-        
+
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
+
+        app.UseSwagger();
+        app.UseSwaggerUI(s =>
+        {
+            s.SwaggerEndpoint("/swagger/v1/swagger.json", "Code Maze API v1");
+            s.SwaggerEndpoint("/swagger/v2/swagger.json", "Code Maze API v2");
+        });
         app.Run();
     }
 }
