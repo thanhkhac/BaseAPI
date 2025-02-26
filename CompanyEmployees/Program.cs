@@ -54,6 +54,7 @@ public class Program
         builder.Services.ConfigureRateLimitingOptions(); 
         builder.Services.AddHttpContextAccessor();
         builder.Services.ConfigureIdentity();
+        builder.Services.ConfigureJWT(builder.Configuration);
         var app = builder.Build();
 
         var logger = app.Services.GetRequiredService<ILoggerManager>();
